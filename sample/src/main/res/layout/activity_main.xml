@@ -1,43 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/paper">
+    android:background="@color/paper"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
+        android:background="@color/paper"
         android:elevation="6dp"
         android:orientation="horizontal"
-        android:background="@color/paper"
-        >
+        android:paddingLeft="16dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="8dp"
-            android:text="To"
-            />
+            android:text="To" />
 
         <com.doodle.android.chips.ChipsView
             android:id="@+id/cv_contacts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:overScrollMode="never"
-            app:cv_max_height="120dp"
-            app:cv_vertical_spacing="2dp"
+            app:cv_bg_color="#899"
             app:cv_bg_color_indelible="#99dde1e4"
+            app:cv_chips_margin="2dp"
+            app:cv_icon_placeholder_tint="#06f"
+            app:cv_max_height="120dp"
             app:cv_text_color_indelible="#888"
             app:cv_text_hint="This is the hint text"
-            app:cv_bg_color="#899"
-            app:cv_icon_placeholder_tint="#06f"
-            app:cv_chips_margin="2dp"
-            />
+            app:cv_vertical_spacing="2dp" />
 
         <!--
             customize with: .. xmlns:app="http://schemas.android.com/apk/res-auto" ..
@@ -63,5 +59,11 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_contacts"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/remove_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>

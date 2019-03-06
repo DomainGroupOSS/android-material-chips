@@ -341,6 +341,14 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
         return false;
     }
 
+    public void removeAllChips() {
+        mChipList.clear();
+        if (mChipList.isEmpty()) {
+            mEditText.setHint(mChipsHintText);
+        }
+        onChipsChanged(true);
+    }
+
     public Contact tryToRecognizeAddress() {
         String text = mEditText.getText().toString();
         if (!TextUtils.isEmpty(text)) {

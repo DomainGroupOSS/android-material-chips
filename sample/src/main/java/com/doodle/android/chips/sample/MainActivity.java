@@ -120,6 +120,13 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        findViewById(R.id.remove_all).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mChipsView.removeAllChips();
+            }
+        });
     }
 
     public class ContactsAdapter extends RecyclerView.Adapter<CheckableContactViewHolder> {
