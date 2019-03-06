@@ -513,7 +513,7 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
             }
             onChipsChanged(true);
             if (nameClicked) {
-                mEditText.setText(chip.getContact().getEmailAddress());
+//                mEditText.setText(chip.getContact().getEmailAddress());
                 addLeadingMarginSpan();
                 mEditText.requestFocus();
                 mEditText.setSelection(mEditText.length());
