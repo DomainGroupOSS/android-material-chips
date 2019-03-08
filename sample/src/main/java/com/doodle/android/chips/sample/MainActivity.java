@@ -37,6 +37,7 @@ import com.doodle.android.chips.ChipsView;
 import com.doodle.android.chips.model.Contact;
 import com.doodle.android.chips.views.ChipsEditText;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -219,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (selection.isChecked()) {
                 boolean indelibe = Math.random() > 0.8f;
-                mChipsView.addChip(email, imgUrl, contact, indelibe);
+                mChipsView.addChip(email, Uri.EMPTY, contact, indelibe);
             } else {
                 mChipsView.removeChipBy(contact);
             }

@@ -15,10 +15,12 @@
         <attr name="cv_icon_placeholder" format="reference"/>
         <attr name="cv_icon_placeholder_tint" format="color"/>
         <attr name="cv_icon_delete" format="reference"/>
+        <attr name="cv_icon_delete_selected" format="reference"/>
         <attr name="cv_dialog_error_msg" format="string"/>
         <attr name="cv_max_height" format="dimension"/>
         <attr name="cv_vertical_spacing" format="dimension"/>
         <attr name="cv_text_hint" format="string" />
         <attr name="cv_chips_margin" format="dimension"/>
+        <attr name="cv_icon_delete_always_show" format="boolean"/>
     </declare-styleable>
 </resources>

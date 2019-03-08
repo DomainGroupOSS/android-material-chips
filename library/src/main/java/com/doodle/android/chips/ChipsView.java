@@ -98,8 +98,9 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
     @ColorInt
     int mChipsPlaceholderTint;
     private int mChipsDeleteResId;
+    private int mChipsDeleteSelectedResId;
     private String mChipsHintText;
-
+    private boolean alwaysShowCloseButton;
     private int mChipsMargin;
     //</editor-fold>
 
@@ -185,6 +186,8 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
             mChipsPlaceholderResId = a.getResourceId(R.styleable.ChipsView_cv_icon_placeholder, R.drawable.ic_person_24dp);
             mChipsPlaceholderTint = a.getColor(R.styleable.ChipsView_cv_icon_placeholder_tint, 0);
             mChipsDeleteResId = a.getResourceId(R.styleable.ChipsView_cv_icon_delete, R.drawable.ic_close_24dp);
+            mChipsDeleteSelectedResId = a.getResourceId(R.styleable.ChipsView_cv_icon_delete_selected, R.drawable.ic_close_selected_24dp);
+            alwaysShowCloseButton = a.getBoolean(R.styleable.ChipsView_cv_icon_delete_always_show, false);
             mChipsHintText = a.getString(R.styleable.ChipsView_cv_text_hint);
             mChipsMargin = a.getDimensionPixelSize(R.styleable.ChipsView_cv_chips_margin, 0);
         } finally {
@@ -721,6 +724,7 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
                     mPersonIcon.setColorFilter(mChipsPlaceholderTint, PorterDuff.Mode.SRC_ATOP);
                 }
                 mCloseIcon.setBackgroundResource(mChipsDeleteResId);
+                mCloseIcon.setAlpha(1f);
 
                 // USE INITIALS INSTEAD OF PERSON ICON
                 if (mUseInitials) {
@@ -789,7 +793,12 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
                     mPersonIcon.animate().alpha(0.0f).setDuration(200).start();
                 }
                 mAvatarView.animate().alpha(0.0f).setDuration(200).start();
-                mCloseIcon.animate().alpha(1f).setDuration(200).setStartDelay(100).start();
+                if (alwaysShowCloseButton) {
+                    mCloseIcon.setAlpha(1f);
+                } else {
+                    mCloseIcon.animate().alpha(1f).setDuration(200).setStartDelay(100).start();
+                }
+                mCloseIcon.setBackgroundResource(mChipsDeleteResId);
 
             } else {
                 if (mChipsValidator != null && !mChipsValidator.isValid(mContact)) {
@@ -814,7 +823,12 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
                     mPersonIcon.animate().alpha(1f).setDuration(200).setStartDelay(100).start();
                 }
                 mAvatarView.animate().alpha(1f).setDuration(200).setStartDelay(100).start();
-                mCloseIcon.animate().alpha(0.0f).setDuration(200).start();
+                if (alwaysShowCloseButton) {
+                    mCloseIcon.setAlpha(1f);
+                } else {
+                    mCloseIcon.animate().alpha(0.0f).setDuration(200).start();
+                }
+                mCloseIcon.setBackgroundResource(mChipsDeleteSelectedResId);
             }
         }
 
