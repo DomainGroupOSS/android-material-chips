@@ -78,12 +78,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mChipsView.setChipsListener(new ChipsView.ChipsListener() {
-
-            @Override
-            public void onChipSelected(ChipsView.Chip chip) {
-                Log.d("ChipSelected", "chip: " + chip.toString());
-            }
-
             @Override
             public void onChipAdded(ChipsView.Chip chip) {
                 for (ChipsView.Chip chipItem : mChipsView.getChips()) {
@@ -93,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onChipDeleted(ChipsView.Chip chip) {
-                Log.d("ChipDeleted", "chip: " + chip.toString());
+
             }
 
             @Override
