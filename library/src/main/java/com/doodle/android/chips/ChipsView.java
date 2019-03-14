@@ -523,6 +523,7 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
             }
         } else {
             chip.setSelected(true);
+            mChipsListener.onChipSelected(chip);
             onChipsChanged(false);
         }
     }
@@ -892,6 +893,8 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
     }
 
     public interface ChipsListener {
+        void onChipSelected(Chip chip);
+
         void onChipAdded(Chip chip);
 
         void onChipDeleted(Chip chip);
