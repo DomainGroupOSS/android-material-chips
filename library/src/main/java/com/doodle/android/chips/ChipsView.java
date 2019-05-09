@@ -29,6 +29,7 @@ import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.InputType;
@@ -516,7 +517,6 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
             }
             onChipsChanged(true);
             if (nameClicked) {
-//                mEditText.setText(chip.getContact().getEmailAddress());
                 addLeadingMarginSpan();
                 mEditText.requestFocus();
                 mEditText.setSelection(mEditText.length());
@@ -651,16 +651,9 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
         private final Contact mContact;
         private final boolean mIsIndelible;
 
-        private RelativeLayout mView;
-        private View mIconWrapper;
+        private ConstraintLayout mView;
         private TextView mTextView;
-        private TextView mInitials;
-
-        private ImageView mAvatarView;
-        private ImageView mPersonIcon;
         private ImageView mCloseIcon;
-
-        private ImageView mErrorIcon;
 
         private boolean mIsSelected = false;
 
@@ -685,21 +678,15 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
 
         public View getView() {
             if (mView == null) {
-                mView = (RelativeLayout) inflate(getContext(), R.layout.chips_view, null);
+                mView = (ConstraintLayout) inflate(getContext(), R.layout.chips_view, null);
 
                 // Layout Params + margins
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) (CHIP_HEIGHT * mDensity));
                 layoutParams.setMargins(0, 0, mChipsMargin, 0);
                 mView.setLayoutParams(layoutParams);
 
-                mAvatarView = mView.findViewById(R.id.ri_ch_avatar);
-                mIconWrapper = mView.findViewById(R.id.rl_ch_avatar);
                 mTextView = mView.findViewById(R.id.tv_ch_name);
-                mInitials = mView.findViewById(R.id.tv_ch_initials);
-                mPersonIcon = mView.findViewById(R.id.iv_ch_person);
                 mCloseIcon = mView.findViewById(R.id.iv_ch_close);
-
-                mErrorIcon = mView.findViewById(R.id.iv_ch_error);
 
                 // set initial res & attrs
                 if (mTypeface != null) {
@@ -711,41 +698,16 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
                 } else {
                     ((GradientDrawable) mView.getBackground()).setColor(mChipsBgColor);
                 }
-                mIconWrapper.setBackgroundResource(R.drawable.circle);
                 if (mIsIndelible) {
                     mTextView.setTextColor(mChipsTextColorIndelible);
                 } else {
                     mTextView.setTextColor(mChipsTextColor);
                 }
 
-                // set icon resources
-                mPersonIcon.setImageResource(mChipsPlaceholderResId);
-                if (mChipsPlaceholderTint != 0) {
-                    mPersonIcon.setColorFilter(mChipsPlaceholderTint, PorterDuff.Mode.SRC_ATOP);
-                }
                 mCloseIcon.setBackgroundResource(mChipsDeleteResId);
                 mCloseIcon.setAlpha(1f);
 
-                // USE INITIALS INSTEAD OF PERSON ICON
-                if (mUseInitials) {
-                    mPersonIcon.setVisibility(GONE);
-                    mInitials.setVisibility(VISIBLE);
-                    if (mInitialsTypeface != null) {
-                        mInitials.setTypeface(mInitialsTypeface);
-                    }
-                    if (mInitialsTextColor != 0) {
-                        mInitials.setTextColor(mInitialsTextColor);
-                    }
-                    if (mInitialsTextSize != 0) {
-                        mInitials.setTextSize(TypedValue.COMPLEX_UNIT_SP, mInitialsTextSize);
-                    }
-                } else {
-                    mPersonIcon.setVisibility(VISIBLE);
-                    mInitials.setVisibility(GONE);
-                }
-
                 mView.setOnClickListener(this);
-                mIconWrapper.setOnClickListener(this);
             }
             updateViews();
             return mView;
@@ -753,46 +715,18 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
 
         private void updateViews() {
             mTextView.setText(mLabel);
-            if (mUseInitials) {
-                mInitials.setText(getInitials());
-            }
             if (mTypeface != null) {
                 mTextView.setTypeface(mTypeface);
-            }
-            if (mPhotoUri != null) {
-                Picasso.with(getContext())
-                        .load(mPhotoUri)
-                        .noPlaceholder()
-                        .into(mAvatarView, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                mPersonIcon.setVisibility(View.INVISIBLE);
-                            }
-
-                            @Override
-                            public void onError() {
-
-                            }
-                        });
             }
             if (isSelected()) {
                 if (mChipsValidator != null && !mChipsValidator.isValid(mContact)) {
                     // not valid & show error
                     ((GradientDrawable) mView.getBackground()).setColor(mChipsBgColorErrorClicked);
                     mTextView.setTextColor(mChipsTextColorErrorClicked);
-                    mIconWrapper.getBackground().setColorFilter(mChipsColorErrorClicked, PorterDuff.Mode.SRC_ATOP);
-                    mErrorIcon.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
                 } else {
                     ((GradientDrawable) mView.getBackground()).setColor(mChipsBgColorClicked);
                     mTextView.setTextColor(mChipsTextColorClicked);
-                    mIconWrapper.getBackground().setColorFilter(mChipsColorClicked, PorterDuff.Mode.SRC_ATOP);
                 }
-                if (mUseInitials) {
-                    mInitials.animate().alpha(0.0f).setDuration(200).start();
-                } else {
-                    mPersonIcon.animate().alpha(0.0f).setDuration(200).start();
-                }
-                mAvatarView.animate().alpha(0.0f).setDuration(200).start();
                 if (alwaysShowCloseButton) {
                     mCloseIcon.setAlpha(1f);
                 } else {
@@ -801,13 +735,6 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
                 mCloseIcon.setBackgroundResource(mChipsDeleteResId);
 
             } else {
-                if (mChipsValidator != null && !mChipsValidator.isValid(mContact)) {
-                    // not valid & show error
-                    mErrorIcon.setVisibility(View.VISIBLE);
-                    mErrorIcon.setColorFilter(null);
-                } else {
-                    mErrorIcon.setVisibility(View.GONE);
-                }
                 if (mIsIndelible) {
                     ((GradientDrawable) mView.getBackground()).setColor(mChipsBgColorIndelible);
                     mTextView.setTextColor(mChipsTextColorIndelible);
@@ -815,14 +742,6 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
                     ((GradientDrawable) mView.getBackground()).setColor(mChipsBgColor);
                     mTextView.setTextColor(mChipsTextColor);
                 }
-                mIconWrapper.getBackground().setColorFilter(mChipsColor, PorterDuff.Mode.SRC_ATOP);
-
-                if (mUseInitials) {
-                    mInitials.animate().alpha(1f).setDuration(200).setStartDelay(100).start();
-                } else {
-                    mPersonIcon.animate().alpha(1f).setDuration(200).setStartDelay(100).start();
-                }
-                mAvatarView.animate().alpha(1f).setDuration(200).setStartDelay(100).start();
                 if (alwaysShowCloseButton) {
                     mCloseIcon.setAlpha(1f);
                 } else {

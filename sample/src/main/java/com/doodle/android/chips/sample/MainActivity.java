@@ -147,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 "at@doodle.com",
                 "asd@qwe.de",
                 "verylongaddress@verylongserver.com",
+                "evenlongerohwowindeedverylongaddress@verylongserver.com",
                 "thisIsMyEmail@address.com",
                 "test@testeration.de",
                 "short@short.com"
