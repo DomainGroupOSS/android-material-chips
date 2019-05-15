@@ -116,13 +116,6 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
     private Object mCurrentEditTextSpan;
     private ChipValidator mChipsValidator;
     private Typeface mTypeface;
-
-    // initials
-    private boolean mUseInitials = false;
-    private int mInitialsTextSize;
-    private Typeface mInitialsTypeface;
-    @ColorInt
-    private int mInitialsTextColor;
     //</editor-fold>
 
     //<editor-fold desc="Constructors">
@@ -221,7 +214,7 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
         mEditText.setLineSpacing(mVerticalSpacing, (CHIP_HEIGHT * mDensity) / mEditText.getLineHeight());
         mEditText.setBackgroundColor(Color.argb(0, 0, 0, 0));
         mEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI | EditorInfo.IME_ACTION_UNSPECIFIED);
-        mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         mEditText.setHint(mChipsHintText);
 
         mChipsContainer.addView(mEditText);
@@ -308,19 +301,6 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
         }
     }
 
-    /**
-     * Use Initials instead of the person icon.
-     *
-     * @param textSize         in SP
-     * @param initialsTypeface Nullable typeface
-     */
-    public void useInitials(int textSize, @Nullable Typeface initialsTypeface, @ColorInt int textColor) {
-        this.mUseInitials = true;
-        this.mInitialsTextSize = textSize;
-        this.mInitialsTypeface = initialsTypeface;
-        this.mInitialsTextColor = textColor;
-    }
-
     public void clearText() {
         mEditText.setText("");
         onChipsChanged(true);
@@ -350,16 +330,6 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
         mEditText.setHint(mChipsHintText);
         onChipsChanged(true);
         return true;
-    }
-
-    public Contact tryToRecognizeAddress() {
-        String text = mEditText.getText().toString();
-        if (!TextUtils.isEmpty(text)) {
-            if (Common.isValidEmail(text)) {
-                return new Contact(text, "", null, text, null);
-            }
-        }
-        return null;
     }
 
     public void setChipsListener(ChipsListener chipsListener) {
@@ -435,11 +405,8 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
         boolean shouldDeleteText = true;
         if (text != null && text.length() > 0) {
 
-            if (Common.isValidEmail(text)) {
-                onEmailRecognized(text);
-            } else {
-                shouldDeleteText = onNonEmailRecognized(text);
-            }
+            shouldDeleteText = onNonEmailRecognized(text);
+
             if (shouldDeleteText) {
                 mEditText.setSelection(0);
             }
@@ -452,11 +419,7 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
         for (String split : textSplitList) {
             if (!TextUtils.isEmpty(split)) {
                 split = split.replaceAll("[\u00a0 ]", "");
-                if (Common.isValidEmail(split)) {
-                    onEmailRecognized(split);
-                } else {
-                    notValidEmails.add(split);
-                }
+                notValidEmails.add(split);
             }
         }
         if (notValidEmails.size() > 0) {
@@ -464,24 +427,6 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
                 mChipsListener.onInputNotRecognized(TextUtils.join(", ", notValidEmails));
             }
         }
-    }
-
-    private void onEmailRecognized(String email) {
-        onEmailRecognized(new Contact(email, "", null, email, null));
-    }
-
-    private void onEmailRecognized(Contact contact) {
-        Chip chip = new Chip(contact.getDisplayName(), null, contact);
-        mChipList.add(chip);
-        if (mChipsListener != null) {
-            mChipsListener.onChipAdded(chip);
-        }
-        post(new Runnable() {
-            @Override
-            public void run() {
-                onChipsChanged(true);
-            }
-        });
     }
 
     private boolean onNonEmailRecognized(String text) {
@@ -748,20 +693,6 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
                     mCloseIcon.animate().alpha(0.0f).setDuration(200).start();
                 }
                 mCloseIcon.setBackgroundResource(mChipsDeleteSelectedResId);
-            }
-        }
-
-        @NonNull
-        private String getInitials() {
-            if (mLabel != null) {
-                if (mLabel.trim().contains(" ")) {
-                    String[] split = mLabel.trim().split(" ");
-                    return String.format("%s%s", String.valueOf(split[0].charAt(0)), String.valueOf(split[split.length - 1].charAt(0)));
-                } else {
-                    return String.valueOf(mLabel.charAt(0));
-                }
-            } else {
-                return "";
             }
         }
 
