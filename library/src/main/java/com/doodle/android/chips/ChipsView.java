@@ -405,11 +405,8 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
         boolean shouldDeleteText = true;
         if (text != null && text.length() > 0) {
 
-            if (Common.isValidEmail(text)) {
-                onEmailRecognized(text);
-            } else {
-                shouldDeleteText = onNonEmailRecognized(text);
-            }
+            shouldDeleteText = onNonEmailRecognized(text);
+
             if (shouldDeleteText) {
                 mEditText.setSelection(0);
             }
@@ -422,11 +419,7 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
         for (String split : textSplitList) {
             if (!TextUtils.isEmpty(split)) {
                 split = split.replaceAll("[\u00a0 ]", "");
-                if (Common.isValidEmail(split)) {
-                    onEmailRecognized(split);
-                } else {
-                    notValidEmails.add(split);
-                }
+                notValidEmails.add(split);
             }
         }
         if (notValidEmails.size() > 0) {
@@ -434,24 +427,6 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
                 mChipsListener.onInputNotRecognized(TextUtils.join(", ", notValidEmails));
             }
         }
-    }
-
-    private void onEmailRecognized(String email) {
-        onEmailRecognized(new Contact(email, "", null, email, null));
-    }
-
-    private void onEmailRecognized(Contact contact) {
-        Chip chip = new Chip(contact.getDisplayName(), null, contact);
-        mChipList.add(chip);
-        if (mChipsListener != null) {
-            mChipsListener.onChipAdded(chip);
-        }
-        post(new Runnable() {
-            @Override
-            public void run() {
-                onChipsChanged(true);
-            }
-        });
     }
 
     private boolean onNonEmailRecognized(String text) {
