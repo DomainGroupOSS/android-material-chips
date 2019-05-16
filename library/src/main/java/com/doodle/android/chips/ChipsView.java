@@ -103,6 +103,7 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
     private String mChipsHintText;
     private boolean alwaysShowCloseButton;
     private int mChipsMargin;
+    private int mChipsTextSize;
     //</editor-fold>
 
     //<editor-fold desc="Private Fields">
@@ -184,6 +185,7 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
             alwaysShowCloseButton = a.getBoolean(R.styleable.ChipsView_cv_icon_delete_always_show, false);
             mChipsHintText = a.getString(R.styleable.ChipsView_cv_text_hint);
             mChipsMargin = a.getDimensionPixelSize(R.styleable.ChipsView_cv_chips_margin, 0);
+            mChipsTextSize = a.getDimensionPixelSize(R.styleable.ChipsView_cv_text_size, 0);
         } finally {
             a.recycle();
         }
@@ -651,6 +653,8 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
 
                 mCloseIcon.setBackgroundResource(mChipsDeleteResId);
                 mCloseIcon.setAlpha(1f);
+
+                mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mChipsTextSize);
 
                 mView.setOnClickListener(this);
             }
