@@ -218,6 +218,8 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
         mEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI | EditorInfo.IME_ACTION_UNSPECIFIED);
         mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         mEditText.setHint(mChipsHintText);
+        mEditText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mChipsTextSize);
+
 
         mChipsContainer.addView(mEditText);
 
@@ -653,8 +655,6 @@ public class ChipsView extends ScrollView implements ChipsEditText.InputConnecti
 
                 mCloseIcon.setBackgroundResource(mChipsDeleteResId);
                 mCloseIcon.setAlpha(1f);
-
-                mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mChipsTextSize);
 
                 mView.setOnClickListener(this);
             }

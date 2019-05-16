@@ -19,7 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="8dp"
-            android:text="To" />
+            android:text="To"
+            android:textSize="16sp"/>
 
         <com.doodle.android.chips.ChipsView
             android:id="@+id/cv_contacts"
@@ -36,7 +37,7 @@
             app:cv_text_color_indelible="#888"
             app:cv_text_hint="This is the hint text"
             app:cv_vertical_spacing="2dp"
-            app:cv_text_size="6sp"/>
+            app:cv_text_size="16sp"/>
 
         <!--
             customize with: .. xmlns:app="http://schemas.android.com/apk/res-auto" ..
